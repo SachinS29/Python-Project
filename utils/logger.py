@@ -9,24 +9,13 @@ from logging.handlers import RotatingFileHandler
 import json
 FORMATTER = logging.Formatter("%(asctime)s  %(name)s  %(levelname)s  %(funcName)s:%(lineno)d  %(message)s")
 
-AIML_CONFIG_DETAILS = '/etc/aghome/aiml/app_config/aiml_db.json'
+
 LOG_DIRECTORY = None
 LOG_FILE = 'NLP_ML'
 log_path_details = None
 
-try:
-    with open(AIML_CONFIG_DETAILS, 'r') as f:
-        log_path_details = json.loads(f.read())
-except Exception as e:
-   print(e)
-   print("Excepetion while reading file from AIML_CONFIG_DETAILS")
 
-try:
-   LOG_DIRECTORY = log_path_details['Log_Dir']   
-except Exception as e:
-   print(e)
-   print("LOG_DIRECTORY is empty")
-   LOG_DIRECTORY = "./logs"
+LOG_DIRECTORY = "./logs"
 
 print("LOG_DIRECTORY","\t****"*10,LOG_DIRECTORY)
 
