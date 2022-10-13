@@ -7,7 +7,10 @@ from logging.handlers import TimedRotatingFileHandler
 from logging.handlers import RotatingFileHandler
 # from safety.business_logics.config.properties import LOG_DIRECTORY, LOG_FILE
 import json
-FORMATTER = logging.Formatter("%(asctime)s  %(name)s  %(levelname)s  %(funcName)s:%(lineno)d  %(message)s")
+from concurrent.futures import ThreadPoolExecutor
+import time
+from datetime import timedelta
+FORMATTER = logging.Formatter("%(threadName)s %(asctime)s  %(name)s  %(levelname)s  %(funcName)s:%(lineno)d  %(message)s")
 
 
 LOG_DIRECTORY = None
@@ -44,3 +47,19 @@ def get_logger(logger_name):
    
 mylogger = get_logger(__name__)
 mylogger.info("Created logger")
+
+
+def test(i):
+       time.sleep(1)
+      #  mylogger.info("loger created")
+       return i,i+1
+start_time = time.monotonic()
+
+list1 = [i for i in range(1,10000)]
+mylogger.info("thread started")
+with ThreadPoolExecutor(max_workers=1000000,thread_name_prefix = "thread to add ") as executor:
+   t = list(executor.map(test, list1))
+mylogger.info("thread finished")
+end_time = time.monotonic()
+mylogger.info(timedelta(seconds=end_time - start_time))
+# print(t)
